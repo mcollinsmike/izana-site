@@ -35,6 +35,13 @@ main {
   font-size: 3rem;
   margin-bottom: 0.5rem;
   opacity: 0.9;
+  display: inline-block;
+  transition: opacity 0.4s ease, text-shadow 0.4s ease;
+}
+
+.glyph:hover {
+  opacity: 1;
+  text-shadow: 0 0 24px var(--accent);
 }
 
 .hero h1 {
