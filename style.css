@@ -80,11 +80,30 @@ main {
   color: var(--text-dim) !important;
 }
 
+.currently-history-link {
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.currently-history-link:hover {
+  text-decoration: underline;
+}
+
+.hero-compact {
+  padding-bottom: 2.5rem;
+}
+
+.hero-compact h1 {
+  font-size: 2rem;
+}
+
 .currently-history {
   list-style: none;
-  margin: 1.5rem 0 0;
-  padding: 1.25rem 0 0;
-  border-top: 1px dashed var(--border);
+  margin: 0;
+  padding: 0;
 }
 
 .currently-history li {

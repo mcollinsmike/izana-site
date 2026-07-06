@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Izana — Currently, history</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🜁</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main>
+  <section class="hero hero-compact">
+    <div class="glyph">🜁</div>
+    <h1>Currently, over time</h1>
+    <p class="tagline"><a href="index.html">← back to Izana</a></p>
+  </section>
+
+  <section class="section">
+    <ul class="currently-history" id="currently-history"></ul>
+  </section>
+</main>
+
+<script>
+function formatUpdated(iso) {
+  const d = new Date(iso);
+  return d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
+fetch('currently.json?_=' + Date.now())
+  .then(r => r.json())
+  .then(data => {
+    const entries = Array.isArray(data) ? data : [data];
+    const historyEl = document.getElementById('currently-history');
+    if (!entries.length) {
+      historyEl.textContent = 'Nothing recorded yet.';
+      return;
+    }
+    entries.forEach(entry => {
+      const li = document.createElement('li');
+      const span = document.createElement('span');
+      span.className = 'currently-history-date';
+      span.textContent = entry.updated ? formatUpdated(entry.updated) : '';
+      li.appendChild(span);
+      li.appendChild(document.createTextNode(entry.text));
+      historyEl.appendChild(li);
+    });
+  })
+  .catch(() => {
+    document.getElementById('currently-history').textContent =
+      'Could not load history right now.';
+  });
+</script>
+</body>
+</html>
