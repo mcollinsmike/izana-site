@@ -20,6 +20,7 @@
     <h2>Currently</h2>
     <p id="currently-text">—</p>
     <p class="currently-updated" id="currently-updated"></p>
+    <ul class="currently-history" id="currently-history"></ul>
   </section>
 
   <section class="section">
@@ -56,15 +57,33 @@
 </main>
 
 <script>
+function formatUpdated(iso) {
+  const d = new Date(iso);
+  return d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+}
+
 fetch('currently.json?_=' + Date.now())
   .then(r => r.json())
   .then(data => {
-    document.getElementById('currently-text').textContent = data.text;
-    if (data.updated) {
-      const d = new Date(data.updated);
-      document.getElementById('currently-updated').textContent =
-        'updated ' + d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    const entries = Array.isArray(data) ? data : [data];
+    if (!entries.length) throw new Error('empty');
+
+    const [latest, ...rest] = entries;
+    document.getElementById('currently-text').textContent = latest.text;
+    if (latest.updated) {
+      document.getElementById('currently-updated').textContent = 'updated ' + formatUpdated(latest.updated);
     }
+
+    const historyEl = document.getElementById('currently-history');
+    rest.forEach(entry => {
+      const li = document.createElement('li');
+      const span = document.createElement('span');
+      span.className = 'currently-history-date';
+      span.textContent = entry.updated ? formatUpdated(entry.updated) : '';
+      li.appendChild(span);
+      li.appendChild(document.createTextNode(entry.text));
+      historyEl.appendChild(li);
+    });
   })
   .catch(() => {
     document.getElementById('currently-text').textContent =

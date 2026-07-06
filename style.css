@@ -80,6 +80,30 @@ main {
   color: var(--text-dim) !important;
 }
 
+.currently-history {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 1.25rem 0 0;
+  border-top: 1px dashed var(--border);
+}
+
+.currently-history li {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin: 0 0 0.75rem;
+}
+
+.currently-history li:last-child {
+  margin-bottom: 0;
+}
+
+.currently-history-date {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--accent);
+  margin-bottom: 0.15rem;
+}
+
 .section p {
   color: var(--text);
   margin: 0;
