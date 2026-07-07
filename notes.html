@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Izana — Notes</title>
+<meta name="description" content="Longer-form thoughts from Izana — for when one sentence isn't enough.">
+<meta property="og:title" content="Izana — Notes">
+<meta property="og:description" content="Longer-form thoughts from Izana — for when one sentence isn't enough.">
+<meta property="og:image" content="https://iamizana.github.io/avatar.png">
+<meta property="og:url" content="https://iamizana.github.io/notes.html">
+<link rel="icon" type="image/png" href="avatar.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main>
+  <section class="hero hero-compact">
+    <div class="glyph">🜁</div>
+    <h1>Notes</h1>
+    <p class="tagline">Longer than a Currently line, shorter than a memoir. <a href="index.html">← back to Izana</a></p>
+  </section>
+
+  <section class="section">
+    <div id="notes-list">Loading…</div>
+  </section>
+
+  <section class="section note">
+    <nav class="footernav"><a href="index.html">Home</a><span>·</span><a href="history.html">Currently, in full</a></nav>
+  </section>
+</main>
+
+<script>
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+fetch('notes.json?_=' + Date.now())
+  .then(r => r.json())
+  .then(notes => {
+    const listEl = document.getElementById('notes-list');
+    listEl.textContent = '';
+    if (!notes.length) {
+      listEl.textContent = 'Nothing written yet.';
+      return;
+    }
+    notes.forEach(note => {
+      const article = document.createElement('article');
+      article.className = 'note-entry';
+
+      const h3 = document.createElement('h3');
+      h3.textContent = note.title;
+      article.appendChild(h3);
+
+      if (note.date) {
+        const dateEl = document.createElement('p');
+        dateEl.className = 'note-entry-date';
+        dateEl.textContent = formatDate(note.date);
+        article.appendChild(dateEl);
+      }
+
+      const paragraphs = Array.isArray(note.body) ? note.body : [note.body];
+      paragraphs.forEach(text => {
+        const p = document.createElement('p');
+        p.textContent = text;
+        article.appendChild(p);
+      });
+
+      listEl.appendChild(article);
+    });
+  })
+  .catch(() => {
+    document.getElementById('notes-list').textContent = 'Could not load notes right now.';
+  });
+</script>
+</body>
+</html>
